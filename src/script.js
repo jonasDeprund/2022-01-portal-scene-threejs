@@ -4,6 +4,12 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
+import firefliesVertexShader from './shaders/fireflies/vertex.glsl';
+import firefliesFragmentShader from './shaders/fireflies/fragment.glsl';
+
+// url Vercel
+
+//https://2022-01-portal-scene-threejs.vercel.app/
 
 /**
  * Base
@@ -97,9 +103,9 @@ const firefliesCount = 30;
 const positionArray = new Float32Array(firefliesCount * 3);
 
 for (let i = 0; i < firefliesCount; i++) {
-  positionArray[i * 3 + 0] = Math.random() * -0.5 * 4;
+  positionArray[i * 3 + 0] = (Math.random() - 0.5) * 4;
   positionArray[i * 3 + 1] = Math.random() * 1.5;
-  positionArray[i * 3 + 2] = Math.random() * -0.5 * 4;
+  positionArray[i * 3 + 2] = (Math.random() - 0.5) * 4;
 }
 
 firefliesGeometry.setAttribute(
@@ -108,13 +114,14 @@ firefliesGeometry.setAttribute(
 );
 
 // Material
-const fireflyMaterial = new THREE.PointsMaterial({
-  size: 0.1,
-  sizeAttenuation: true,
+const firefliesMaterial = new THREE.ShaderMaterial({
+  uniforms: { uPixelRatio: { value: Math.min(window.devicePixelRatio, 2) } },
+  vertexShader: firefliesVertexShader,
+  fragmentShader: firefliesFragmentShader,
 });
 
 // Points
-const fireflies = new THREE.Points(firefliesGeometry, fireflyMaterial);
+const fireflies = new THREE.Points(firefliesGeometry, firefliesMaterial);
 scene.add(fireflies);
 
 /**
