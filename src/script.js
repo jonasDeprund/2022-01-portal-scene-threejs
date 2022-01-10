@@ -71,38 +71,39 @@ const portalLightMaterial = new THREE.ShaderMaterial({
   fragmentShader: portalFragmentShader,
 });
 
-/**
- * Model
- */
+(portalLightMaterial.side = THREE.DoubleSide),
+  /**
+   * Model
+   */
 
-gltfLoader.load('portal.glb', (gltf) => {
-  gltf.scene.traverse((child) => {
-    child.material = bakedMaterial;
+  gltfLoader.load('portal.glb', (gltf) => {
+    gltf.scene.traverse((child) => {
+      child.material = bakedMaterial;
+    });
+
+    scene.add(gltf.scene);
+
+    gltf.scene.traverse((child) => {
+      child.material = bakedMaterial;
+    });
+    scene.add(gltf.scene);
+
+    // Get each object
+    const portalLightMesh = gltf.scene.children.find(
+      (child) => child.name === 'portalLight'
+    );
+    const poleLightAMesh = gltf.scene.children.find(
+      (child) => child.name === 'poleLightA'
+    );
+    const poleLightBMesh = gltf.scene.children.find(
+      (child) => child.name === 'poleLightB'
+    );
+
+    // Apply materials
+    portalLightMesh.material = portalLightMaterial;
+    poleLightAMesh.material = poleLightMaterial;
+    poleLightBMesh.material = poleLightMaterial;
   });
-
-  scene.add(gltf.scene);
-
-  gltf.scene.traverse((child) => {
-    child.material = bakedMaterial;
-  });
-  scene.add(gltf.scene);
-
-  // Get each object
-  const portalLightMesh = gltf.scene.children.find(
-    (child) => child.name === 'portalLight'
-  );
-  const poleLightAMesh = gltf.scene.children.find(
-    (child) => child.name === 'poleLightA'
-  );
-  const poleLightBMesh = gltf.scene.children.find(
-    (child) => child.name === 'poleLightB'
-  );
-
-  // Apply materials
-  portalLightMesh.material = portalLightMaterial;
-  poleLightAMesh.material = poleLightMaterial;
-  poleLightBMesh.material = poleLightMaterial;
-});
 
 /**
  * Fireflies
