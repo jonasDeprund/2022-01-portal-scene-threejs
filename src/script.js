@@ -20,11 +20,6 @@ import portalFragmentShader from './shaders/portal/fragment.glsl';
 /**
  * Base
  */
-// Debug
-const debugObject = {};
-const gui = new dat.GUI({
-  width: 400,
-});
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl');
@@ -65,24 +60,12 @@ const bakedMaterial = new THREE.MeshBasicMaterial({ map: bakedTexture });
 const poleLightMaterial = new THREE.MeshBasicMaterial({ color: 0xffffe5 });
 
 // Portal light material
-debugObject.portalColorStart = '#0b0c1e';
-debugObject.portalColorEnd = '#ffffff';
-
-gui.addColor(debugObject, 'portalColorStart').onChange(() => {
-  portalLightMaterial.uniforms.uColorStart.value.set(
-    debugObject.portalColorStart
-  );
-});
-
-gui.addColor(debugObject, 'portalColorEnd').onChange(() => {
-  portalLightMaterial.uniforms.uColorEnd.value.set(debugObject.portalColorEnd);
-});
 
 const portalLightMaterial = new THREE.ShaderMaterial({
   uniforms: {
     uTime: { value: 0 },
-    uColorStart: { value: new THREE.Color(debugObject.portalColorStart) },
-    uColorEnd: { value: new THREE.Color(debugObject.portalColorEnd) },
+    uColorStart: { value: new THREE.Color('#0b0c1e') },
+    uColorEnd: { value: new THREE.Color('#ffffff') },
   },
   vertexShader: portalVertexShader,
   fragmentShader: portalFragmentShader,
@@ -163,13 +146,6 @@ const firefliesMaterial = new THREE.ShaderMaterial({
   depthWrite: false,
 });
 
-gui
-  .add(firefliesMaterial.uniforms.uSize, 'value')
-  .min(0)
-  .max(500)
-  .step(1)
-  .name('firefliesSize');
-
 // Points
 const fireflies = new THREE.Points(firefliesGeometry, firefliesMaterial);
 scene.add(fireflies);
@@ -232,11 +208,8 @@ renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.outputEncoding = THREE.sRGBEncoding;
 
-debugObject.clearColor = '#0b0c1e';
-renderer.setClearColor(debugObject.clearColor);
-gui.addColor(debugObject, 'clearColor').onChange(() => {
-  renderer.setClearColor(debugObject.clearColor);
-});
+renderer.setClearColor('#0b0c1e');
+
 /**
  * Animate
  */
